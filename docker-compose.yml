@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: bookflow-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: bookflow
+      POSTGRES_PASSWORD: bookflow
+      POSTGRES_DB: bookflow
+
+volumes:
+  postgres_data:

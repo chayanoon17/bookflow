@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Merchant {
+  id           String        @id @default(cuid())
+  email        String        @unique
+  passwordHash String
+  shopName     String
+  slug         String        @unique
+  phone        String?
+  logoUrl      String?
+  workingHours Json?
+  services     Service[]
+  appointments Appointment[]
+  holidays     HolidayOff[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Service {
+  id              String        @id @default(cuid())
+  name            String
+  description     String?
+  price           Float
+  durationMinutes Int
+  merchantId      String
+  merchant        Merchant      @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  appointments    Appointment[]
+  isActive        Boolean       @default(true)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([merchantId])
+}
+
+model Appointment {
+  id             String    @id @default(cuid())
+  referenceCode  String    @unique
+  merchantId     String
+  merchant       Merchant  @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  serviceId      String
+  service        Service   @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+  customerName   String
+  customerPhone  String
+  customerSocial String?
+  customerNotes  String?
+  startTime      DateTime
+  endTime        DateTime
+  status         String    @default("PENDING")
+  source         String    @default("WEB")
+  reminderSentAt DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([merchantId, startTime])
+  @@index([merchantId, status])
+}
+
+model HolidayOff {
+  id         String   @id @default(cuid())
+  merchantId String
+  merchant   Merchant @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  date       DateTime
+  reason     String?
+  createdAt  DateTime @default(now())
+
+  @@index([merchantId, date])
+}

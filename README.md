@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BookFlow MVP
 
-## Getting Started
+ระบบจองคิวออนไลน์สำหรับร้านค้า Social Media (TikTok Shop, คลินิก, ร้านทำเล็บ)
 
-First, run the development server:
+## Tech Stack
+
+- **Next.js 16** (App Router) + TypeScript
+- **TailwindCSS** — Mobile-first UI
+- **Prisma 6.19** + **Supabase (PostgreSQL)**
+- **NextAuth.js** — Email/Password authentication
+
+## Quick Start
+
+### 1. Create a Supabase project
+
+1. สร้าง project ที่ [supabase.com](https://supabase.com)
+2. ไป **Project Settings → Database → Connection string**
+3. คัดลอก **Transaction pooler** (port `6543`) → ใส่ใน `DATABASE_URL`
+4. คัดลอก **Direct connection** (port `5432`) → ใส่ใน `DIRECT_URL`
+
+### 2. Configure environment
+
+```bash
+cp .env.example .env
+```
+
+แก้ `[YOUR-PASSWORD]` และ `AUTH_SECRET` (สร้างด้วย `openssl rand -base64 32`)
+
+### 3. Push database schema
+
+```bash
+npx prisma db push
+npx prisma generate
+```
+
+> **Local dev (optional):** ยังใช้ Docker Postgres ได้ด้วย `docker compose up -d` แล้วตั้ง `DATABASE_URL` / `DIRECT_URL` เป็น `postgresql://bookflow:bookflow@localhost:5432/bookflow`
+
+### 4. Run development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## User Flows
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Merchant
+1. Register at `/register` — creates shop with unique slug
+2. Dashboard at `/dashboard` — overview, appointments, services, schedule
+3. Copy booking link from Settings — `/{shop-slug}` for TikTok Bio
 
-## Learn More
+### Customer
+1. Visit `/{shop-slug}` — browse services
+2. Book at `/{shop-slug}/book/{serviceId}` — date → time → info
+3. Success page with reference code
 
-To learn more about Next.js, take a look at the following resources:
+## API Endpoints
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/register` | POST | Merchant signup |
+| `/api/auth/[...nextauth]` | * | Authentication |
+| `/api/services` | GET/POST | Service CRUD |
+| `/api/merchant/settings` | GET/PATCH/POST/DELETE | Shop settings & holidays |
+| `/api/slots` | GET | Available time slots |
+| `/api/appointments` | GET/POST/PATCH | Booking management |
+| `/api/webhooks/line` | POST | LINE OA webhook (Phase 3) |
+| `/api/cron/reminders` | GET | 24h reminder cron |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## SRS Coverage
 
-## Deploy on Vercel
+### Phase 1 ✅
+- REQ-1.1.x: Auth, shop profile, slug URL
+- REQ-1.2.x: Service CRUD with price & duration
+- REQ-1.3.x: Working hours, weekly off, special holidays
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Phase 2 ✅
+- REQ-2.1.x: Customer booking flow (mobile-first)
+- REQ-2.2.x: Dashboard, queue management, status changes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Phase 3 (Stubs)
+- REQ-3.1.1: LINE Notify on new booking
+- REQ-3.1.2: Reminder cron endpoint (integrate LINE/Email)
+- REQ-3.2.x: LINE webhook with intent detection stub
+
+### Non-Functional
+- NFR-1: Slot conflict check before insert (race condition prevention)
+- NFR-2: Mobile-first responsive UI
+- NFR-3: Merchant-scoped data access
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── [shopSlug]/          # Customer booking pages
+│   ├── dashboard/           # Merchant dashboard
+│   ├── api/                 # REST API routes
+│   └── login|register/      # Auth pages
+├── components/              # UI components
+├── lib/
+│   ├── slots.ts             # Time slot calculation
+│   ├── appointments.ts      # Booking with conflict check
+│   └── notifications.ts     # LINE Notify
+└── types/                   # Shared types
+```

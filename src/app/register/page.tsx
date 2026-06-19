@@ -4,13 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { ArrowLeft } from "lucide-react";
+import { Calendar, ArrowLeft } from "lucide-react";
 import {
   AuthDivider,
   AuthField,
-  AuthLogo,
   AuthPasswordField,
-  AuthShell,
+  AuthSplitShell,
   AuthSubmit,
 } from "@/components/auth/auth-ui";
 import { SocialLogin } from "@/components/auth/social-login";
@@ -81,113 +80,133 @@ export default function RegisterPage() {
   }
 
   return (
-    <AuthShell>
-      <FadeIn className="flex flex-1 flex-col">
-        <div className="relative mb-8 flex items-center justify-center">
-          <Link
-            href="/login"
-            className="absolute left-0 flex h-10 w-10 items-center justify-center rounded-full text-gray-700 transition hover:bg-gray-100"
-            aria-label="Back to login"
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </Link>
-          <AuthLogo />
-        </div>
-
-        <h1 className="mb-8 text-center text-xl font-semibold text-gray-900">
-          Create your Account
-        </h1>
-
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <AuthField
-            id="email"
-            label="Email"
-            type="email"
-            value={form.email}
-            onChange={(e) => updateField("email", e.target.value)}
-            required
-            autoComplete="email"
-            placeholder="you@example.com"
-          />
-          <AuthPasswordField
-            id="password"
-            label="Password"
-            value={form.password}
-            onChange={(e) => updateField("password", e.target.value)}
-            required
-            minLength={6}
-            autoComplete="new-password"
-            placeholder="••••••••"
-          />
-          <AuthPasswordField
-            id="confirmPassword"
-            label="Confirm Password"
-            value={form.confirmPassword}
-            onChange={(e) => updateField("confirmPassword", e.target.value)}
-            required
-            minLength={6}
-            autoComplete="new-password"
-            placeholder="••••••••"
-          />
-
-          <div className="border-t border-gray-100 pt-2">
-            <p className="mb-4 text-sm font-medium text-gray-500">
-              ข้อมูลร้าน
-            </p>
-            <div className="space-y-5">
-              <AuthField
-                id="shopName"
-                label="Shop name"
-                value={form.shopName}
-                onChange={(e) => updateField("shopName", e.target.value)}
-                required
-                placeholder="My Nail Shop"
-              />
-              <div>
-                <AuthField
-                  id="slug"
-                  label="Shop URL"
-                  value={form.slug}
-                  onChange={(e) => updateField("slug", slugify(e.target.value))}
-                  required
-                  placeholder="my-nail-shop"
-                />
-                <p className="mt-2 text-xs text-gray-400">
-                  bookflow.app/{form.slug || "your-shop"}
-                </p>
+    <AuthSplitShell>
+      <FadeIn>
+        <div className="mx-auto w-full max-w-md">
+          <div className="mb-8 lg:hidden">
+            <Link
+              href="/login"
+              className="mb-6 inline-flex items-center gap-1.5 text-sm text-muted transition hover:text-heading"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              เข้าสู่ระบบ
+            </Link>
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface">
+                <Calendar className="h-5 w-5 text-heading" strokeWidth={1.5} />
               </div>
-              <AuthField
-                id="phone"
-                label="Phone (optional)"
-                type="tel"
-                value={form.phone}
-                onChange={(e) => updateField("phone", e.target.value)}
-                placeholder="08x-xxx-xxxx"
-              />
+              <span className="text-xl font-semibold tracking-tight text-heading">
+                BookFlow
+              </span>
             </div>
           </div>
 
-          {error && (
-            <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
-              {error}
+          <div className="mb-8">
+            <h1 className="text-2xl font-semibold tracking-tight text-heading sm:text-3xl">
+              สร้างร้านของคุณ
+            </h1>
+            <p className="mt-2 text-sm text-muted sm:text-base">
+              สมัครฟรี ตั้งร้านแล้วรับจองได้ทันที
             </p>
-          )}
-          <AuthSubmit loading={loading}>Sign up</AuthSubmit>
-        </form>
+          </div>
 
-        <AuthDivider label="Or sign up with" />
-        <SocialLogin mode="register" />
+          <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm sm:p-8">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <AuthField
+                id="email"
+                label="อีเมล"
+                type="email"
+                value={form.email}
+                onChange={(e) => updateField("email", e.target.value)}
+                required
+                autoComplete="email"
+                placeholder="you@example.com"
+              />
+              <AuthPasswordField
+                id="password"
+                label="รหัสผ่าน"
+                value={form.password}
+                onChange={(e) => updateField("password", e.target.value)}
+                required
+                minLength={6}
+                autoComplete="new-password"
+                placeholder="••••••••"
+              />
+              <AuthPasswordField
+                id="confirmPassword"
+                label="ยืนยันรหัสผ่าน"
+                value={form.confirmPassword}
+                onChange={(e) =>
+                  updateField("confirmPassword", e.target.value)
+                }
+                required
+                minLength={6}
+                autoComplete="new-password"
+                placeholder="••••••••"
+              />
 
-        <p className="mt-auto pt-10 text-center text-sm text-gray-600">
-          Already have an account?{" "}
-          <Link
-            href="/login"
-            className="font-semibold text-[var(--auth-primary)] hover:underline"
-          >
-            Sign in
-          </Link>
-        </p>
+              <div className="border-t border-border pt-5">
+                <p className="mb-4 text-sm font-medium text-heading">
+                  ข้อมูลร้าน
+                </p>
+                <div className="space-y-5">
+                  <AuthField
+                    id="shopName"
+                    label="ชื่อร้าน"
+                    value={form.shopName}
+                    onChange={(e) => updateField("shopName", e.target.value)}
+                    required
+                    placeholder="ร้านทำเล็บสวย"
+                  />
+                  <div>
+                    <AuthField
+                      id="slug"
+                      label="ลิงก์จอง"
+                      value={form.slug}
+                      onChange={(e) =>
+                        updateField("slug", slugify(e.target.value))
+                      }
+                      required
+                      placeholder="my-nail-shop"
+                    />
+                    <p className="mt-2 text-xs text-muted">
+                      bookflow.app/{form.slug || "your-shop"}
+                    </p>
+                  </div>
+                  <AuthField
+                    id="phone"
+                    label="เบอร์โทร (ไม่บังคับ)"
+                    type="tel"
+                    value={form.phone}
+                    onChange={(e) => updateField("phone", e.target.value)}
+                    placeholder="08x-xxx-xxxx"
+                  />
+                </div>
+              </div>
+
+              {error && (
+                <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
+                  {error}
+                </p>
+              )}
+              <AuthSubmit loading={loading}>สมัครใช้งาน</AuthSubmit>
+            </form>
+
+            <AuthDivider label="หรือสมัครด้วย" />
+            <SocialLogin mode="register" />
+          </div>
+
+          <p className="mt-8 text-center text-sm text-muted">
+            มีบัญชีอยู่แล้ว?{" "}
+            <Link
+              href="/login"
+              className="font-medium text-heading underline-offset-4 hover:underline"
+            >
+              เข้าสู่ระบบ
+            </Link>
+          </p>
+        </div>
       </FadeIn>
-    </AuthShell>
+    </AuthSplitShell>
   );
 }

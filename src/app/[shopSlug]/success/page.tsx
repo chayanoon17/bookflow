@@ -41,13 +41,13 @@ function SuccessContent({ shopSlug }: { shopSlug: string }) {
   }, [ref, shopSlug]);
 
   if (loading) {
-    return <p className="py-16 text-center text-gray-500">กำลังโหลด...</p>;
+    return <p className="py-16 text-center text-muted">กำลังโหลด...</p>;
   }
 
   if (!appointment) {
     return (
       <Card className="text-center">
-        <p className="py-8 text-gray-500">ไม่พบข้อมูลการจอง</p>
+        <p className="py-8 text-muted">ไม่พบข้อมูลการจอง</p>
         <Link href={`/${shopSlug}`}>
           <Button>กลับหน้าร้าน</Button>
         </Link>
@@ -57,21 +57,26 @@ function SuccessContent({ shopSlug }: { shopSlug: string }) {
 
   return (
     <FadeIn className="text-center">
-      <motion.div
-        initial={reduced ? false : "hidden"}
-        animate="visible"
-        variants={scaleIn}
-        transition={{ ...spring, delay: 0.1 }}
-      >
-        <CheckCircle className="mx-auto h-16 w-16 text-green-500" />
-      </motion.div>
-      <h1 className="mt-4 text-2xl font-bold text-gray-900">จองสำเร็จ!</h1>
-      <p className="mt-2 text-gray-500">
+      <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border border-border bg-pastel-mint">
+        <motion.div
+          initial={reduced ? false : "hidden"}
+          animate="visible"
+          variants={scaleIn}
+          transition={{ ...spring, delay: 0.1 }}
+        >
+          <CheckCircle className="h-10 w-10 text-heading" strokeWidth={1.5} />
+        </motion.div>
+      </div>
+      <h1 className="text-2xl font-semibold text-heading">จองสำเร็จ!</h1>
+      <p className="mt-2 text-muted">
         ร้านจะยืนยันการจองของคุณเร็วๆ นี้
       </p>
 
-      <Card className="mt-6 text-left">
-        <div className="space-y-3">
+      <Card className="mt-6 overflow-hidden p-0 text-left">
+        <div className="border-b border-border bg-pastel-blue px-5 py-3">
+          <p className="text-sm font-medium text-heading">รายละเอียดการจอง</p>
+        </div>
+        <div className="space-y-3 p-5">
           <Row
             icon={<Hash className="h-4 w-4" />}
             label="รหัสอ้างอิง"
@@ -118,14 +123,16 @@ function Row({
   highlight?: boolean;
 }) {
   return (
-    <div className="flex items-center justify-between">
-      <span className="flex items-center gap-2 text-sm text-gray-500">
+    <div className="flex items-center justify-between gap-4">
+      <span className="flex items-center gap-2 text-sm text-muted">
         {icon}
         {label}
       </span>
       <span
         className={
-          highlight ? "font-mono font-bold text-indigo-600" : "font-medium"
+          highlight
+            ? "font-mono font-semibold text-heading"
+            : "font-medium text-heading"
         }
       >
         {value}
@@ -141,9 +148,9 @@ export default async function SuccessPage({
 }) {
   const { shopSlug } = await params;
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-12">
+    <div className="min-h-screen bg-background px-4 py-12">
       <div className="mx-auto max-w-md">
-        <Suspense fallback={<p className="text-center">กำลังโหลด...</p>}>
+        <Suspense fallback={<p className="text-center text-muted">กำลังโหลด...</p>}>
           <SuccessContent shopSlug={shopSlug} />
         </Suspense>
       </div>

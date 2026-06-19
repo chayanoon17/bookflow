@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card } from "@/components/ui/card";
+import { Card, PASTEL_VARIANTS, type PastelVariant } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { formatPriceTHB } from "@/lib/utils";
 import { Plus, Trash2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface Service {
   id: string;
@@ -15,6 +16,8 @@ interface Service {
   durationMinutes: number;
   isActive: boolean;
 }
+
+const SERVICE_PASTELS: PastelVariant[] = ["pink", "mint", "blue", "cream"];
 
 export default function ServicesPage() {
   const [services, setServices] = useState<Service[]>([]);
@@ -65,15 +68,18 @@ export default function ServicesPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">บริการ</h1>
+        <h1 className="text-2xl font-semibold text-heading">บริการ</h1>
         <Button onClick={() => setShowForm(!showForm)}>
           <Plus className="h-4 w-4" /> เพิ่มบริการ
         </Button>
       </div>
 
       {showForm && (
-        <Card>
-          <form onSubmit={handleCreate} className="space-y-4">
+        <Card className="overflow-hidden p-0">
+          <div className="border-b border-border bg-pastel-mint px-5 py-4">
+            <h2 className="font-medium text-heading">เพิ่มบริการใหม่</h2>
+          </div>
+          <form onSubmit={handleCreate} className="space-y-4 p-5">
             <Input
               id="name"
               label="ชื่อบริการ"
@@ -132,39 +138,52 @@ export default function ServicesPage() {
       <div className="grid gap-4 sm:grid-cols-2">
         {services
           .filter((s) => s.isActive)
-          .map((service) => (
-            <Card key={service.id}>
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="font-semibold">{service.name}</h3>
-                  {service.description && (
-                    <p className="mt-1 text-sm text-gray-500">
-                      {service.description}
-                    </p>
+          .map((service, i) => {
+            const pastel = SERVICE_PASTELS[i % SERVICE_PASTELS.length];
+            return (
+              <Card key={service.id} className="overflow-hidden p-0">
+                <div
+                  className={cn(
+                    "border-b border-border/50 px-5 py-3",
+                    PASTEL_VARIANTS[pastel]
                   )}
-                  <p className="mt-2 text-sm">
-                    <span className="font-medium text-indigo-600">
-                      {formatPriceTHB(service.price)}
-                    </span>
-                    <span className="text-gray-400"> · </span>
-                    {service.durationMinutes} นาที
-                  </p>
-                </div>
-                <button
-                  onClick={() => handleDelete(service.id)}
-                  className="rounded-lg p-2 text-gray-400 hover:bg-red-50 hover:text-red-600"
                 >
-                  <Trash2 className="h-4 w-4" />
-                </button>
-              </div>
-            </Card>
-          ))}
+                  <h3 className="font-semibold text-heading">{service.name}</h3>
+                </div>
+                <div className="flex items-start justify-between p-5">
+                  <div>
+                    {service.description && (
+                      <p className="text-sm text-muted">{service.description}</p>
+                    )}
+                    <p className="mt-2 text-sm">
+                      <span className="font-medium text-heading">
+                        {formatPriceTHB(service.price)}
+                      </span>
+                      <span className="text-muted"> · </span>
+                      <span className="text-muted">
+                        {service.durationMinutes} นาที
+                      </span>
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleDelete(service.id)}
+                    className="rounded-lg p-2 text-muted transition hover:bg-pastel-pink/50 hover:text-heading"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+              </Card>
+            );
+          })}
       </div>
 
       {services.filter((s) => s.isActive).length === 0 && (
-        <Card>
-          <p className="py-8 text-center text-gray-500">
-            ยังไม่มีบริการ — เพิ่มบริการแรกเพื่อเริ่มรับจอง
+        <Card className="overflow-hidden p-0">
+          <div className="border-b border-border bg-pastel-cream px-5 py-4">
+            <h2 className="font-medium text-heading">ยังไม่มีบริการ</h2>
+          </div>
+          <p className="p-5 text-center text-muted">
+            เพิ่มบริการแรกเพื่อเริ่มรับจอง
           </p>
         </Card>
       )}

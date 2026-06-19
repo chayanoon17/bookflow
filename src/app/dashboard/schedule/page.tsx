@@ -92,24 +92,28 @@ export default function SchedulePage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">เวลาทำการ</h1>
+      <h1 className="text-2xl font-semibold text-heading">เวลาทำการ</h1>
 
-      <Card>
-        <h2 className="mb-4 font-semibold">เวลาเปิด-ปิดรายสัปดาห์</h2>
-        <div className="space-y-3">
+      <Card className="overflow-hidden p-0">
+        <div className="border-b border-border bg-pastel-mint px-5 py-4">
+          <h2 className="font-medium text-heading">เวลาเปิด-ปิดรายสัปดาห์</h2>
+        </div>
+        <div className="space-y-3 p-5">
           {DAY_KEYS.map((day) => (
             <div
               key={day}
-              className="flex flex-wrap items-center gap-3 rounded-xl border border-gray-100 p-3"
+              className="flex flex-wrap items-center gap-3 rounded-xl border border-border bg-surface p-3"
             >
               <label className="flex w-24 items-center gap-2">
                 <input
                   type="checkbox"
                   checked={workingHours[day].open}
                   onChange={(e) => updateDay(day, "open", e.target.checked)}
-                  className="rounded"
+                  className="rounded border-border text-heading focus:ring-heading/20"
                 />
-                <span className="text-sm font-medium">{DAY_LABELS[day]}</span>
+                <span className="text-sm font-medium text-heading">
+                  {DAY_LABELS[day]}
+                </span>
               </label>
               {workingHours[day].open && (
                 <>
@@ -117,64 +121,70 @@ export default function SchedulePage() {
                     type="time"
                     value={workingHours[day].start ?? "09:00"}
                     onChange={(e) => updateDay(day, "start", e.target.value)}
-                    className="rounded-lg border border-gray-300 px-2 py-1 text-sm"
+                    className="rounded-lg border border-border bg-surface px-2 py-1 text-sm text-heading outline-none focus:border-heading focus:ring-2 focus:ring-heading/10"
                   />
-                  <span className="text-gray-400">ถึง</span>
+                  <span className="text-muted">ถึง</span>
                   <input
                     type="time"
                     value={workingHours[day].end ?? "18:00"}
                     onChange={(e) => updateDay(day, "end", e.target.value)}
-                    className="rounded-lg border border-gray-300 px-2 py-1 text-sm"
+                    className="rounded-lg border border-border bg-surface px-2 py-1 text-sm text-heading outline-none focus:border-heading focus:ring-2 focus:ring-heading/10"
                   />
                 </>
               )}
               {!workingHours[day].open && (
-                <span className="text-sm text-gray-400">ปิดทำการ</span>
+                <span className="text-sm text-muted">ปิดทำการ</span>
               )}
             </div>
           ))}
         </div>
-        <Button className="mt-4" onClick={saveSchedule} loading={saving}>
-          บันทึกเวลาทำการ
-        </Button>
+        <div className="border-t border-border px-5 pb-5">
+          <Button onClick={saveSchedule} loading={saving}>
+            บันทึกเวลาทำการ
+          </Button>
+        </div>
       </Card>
 
-      <Card>
-        <h2 className="mb-4 font-semibold">วันหยุดพิเศษ</h2>
-        <div className="flex flex-wrap gap-3">
-          <Input
-            id="holidayDate"
-            type="date"
-            value={holidayDate}
-            onChange={(e) => setHolidayDate(e.target.value)}
-            className="max-w-xs"
-          />
-          <Input
-            id="holidayReason"
-            placeholder="เหตุผล (ไม่บังคับ)"
-            value={holidayReason}
-            onChange={(e) => setHolidayReason(e.target.value)}
-            className="max-w-xs"
-          />
-          <Button onClick={addHoliday}>เพิ่มวันหยุด</Button>
+      <Card className="overflow-hidden p-0">
+        <div className="border-b border-border bg-pastel-pink px-5 py-4">
+          <h2 className="font-medium text-heading">วันหยุดพิเศษ</h2>
         </div>
-        <div className="mt-4 space-y-2">
-          {holidays.map((h) => (
-            <div
-              key={h.id}
-              className="flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2"
-            >
-              <span className="text-sm">
-                {h.date} {h.reason && `— ${h.reason}`}
-              </span>
-              <button
-                onClick={() => removeHoliday(h.id)}
-                className="text-gray-400 hover:text-red-600"
+        <div className="p-5">
+          <div className="flex flex-wrap gap-3">
+            <Input
+              id="holidayDate"
+              type="date"
+              value={holidayDate}
+              onChange={(e) => setHolidayDate(e.target.value)}
+              className="max-w-xs"
+            />
+            <Input
+              id="holidayReason"
+              placeholder="เหตุผล (ไม่บังคับ)"
+              value={holidayReason}
+              onChange={(e) => setHolidayReason(e.target.value)}
+              className="max-w-xs"
+            />
+            <Button onClick={addHoliday}>เพิ่มวันหยุด</Button>
+          </div>
+          <div className="mt-4 space-y-2">
+            {holidays.map((h) => (
+              <div
+                key={h.id}
+                className="flex items-center justify-between rounded-lg bg-primary-muted px-3 py-2"
               >
-                <Trash2 className="h-4 w-4" />
-              </button>
-            </div>
-          ))}
+                <span className="text-sm text-heading">
+                  {h.date} {h.reason && `— ${h.reason}`}
+                </span>
+                <button
+                  onClick={() => removeHoliday(h.id)}
+                  className="text-muted transition hover:text-heading"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       </Card>
     </div>

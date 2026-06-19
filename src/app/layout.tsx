@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Geist, IBM_Plex_Sans_Thai } from "next/font/google";
 import "./globals.css";
 
 const geist = Geist({
@@ -7,10 +7,16 @@ const geist = Geist({
   subsets: ["latin"],
 });
 
+const plexThai = IBM_Plex_Sans_Thai({
+  variable: "--font-plex-thai",
+  subsets: ["thai", "latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
 export const metadata: Metadata = {
   title: "BookFlow — ระบบจองคิวออนไลน์",
   description:
-    "ระบบจองคิวสำหรับร้านค้า Social Media — TikTok Shop, คลินิก, ร้านทำเล็บ",
+    "ระบบจองคิวออนไลน์สำหรับร้าน SME ขนาดเล็ก — ร้านทำเล็บ ตัดผม คลินิกความงาม",
 };
 
 export default function RootLayout({
@@ -19,8 +25,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="th" className={`${geist.variable} h-full antialiased`}>
-      <body className="min-h-full">{children}</body>
+    <html
+      lang="th"
+      className={`${geist.variable} ${plexThai.variable} h-full antialiased`}
+    >
+      <body className="min-h-full bg-background text-foreground">{children}</body>
     </html>
   );
 }

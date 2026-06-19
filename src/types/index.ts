@@ -69,11 +69,11 @@ export const STATUS_LABELS: Record<AppointmentStatus, string> = {
 };
 
 export const STATUS_COLORS: Record<AppointmentStatus, string> = {
-  PENDING: "bg-amber-100 text-amber-800",
-  CONFIRMED: "bg-blue-100 text-blue-800",
-  COMPLETED: "bg-green-100 text-green-800",
-  CANCELLED: "bg-gray-100 text-gray-600",
-  NO_SHOW: "bg-red-100 text-red-800",
+  PENDING: "bg-pastel-cream text-heading",
+  CONFIRMED: "bg-pastel-blue text-heading",
+  COMPLETED: "bg-pastel-mint text-heading",
+  CANCELLED: "bg-primary-muted text-muted",
+  NO_SHOW: "bg-pastel-pink text-heading",
 };
 
 export const BLOCKING_STATUSES: AppointmentStatus[] = ["PENDING", "CONFIRMED"];

@@ -63,14 +63,14 @@ export function SocialLogin({ mode }: { mode: "login" | "register" }) {
             type="button"
             onClick={() => handleSocial(label)}
             aria-label={`${mode === "login" ? "Sign in" : "Sign up"} with ${label}`}
-            className="flex h-14 w-14 items-center justify-center rounded-xl border border-gray-200 bg-white transition hover:bg-gray-50 active:scale-95"
+            className="flex h-12 w-12 items-center justify-center rounded-xl border border-border bg-surface transition hover:bg-primary-muted active:scale-95 sm:h-14 sm:w-14"
           >
             <Icon />
           </button>
         ))}
       </div>
       {message && (
-        <p className="mt-4 text-center text-sm text-gray-500">{message}</p>
+        <p className="mt-4 text-center text-sm text-muted">{message}</p>
       )}
     </div>
   );

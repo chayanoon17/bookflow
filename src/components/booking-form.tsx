@@ -118,18 +118,18 @@ export function BookingForm({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="sticky top-0 z-10 border-b border-gray-200 bg-white">
+    <div className="min-h-screen bg-background">
+      <header className="sticky top-0 z-10 border-b border-border bg-surface">
         <div className="mx-auto flex max-w-lg items-center gap-3 px-4 py-4">
           <Link
             href={`/${shopSlug}`}
-            className="rounded-lg p-1 hover:bg-gray-100"
+            className="rounded-lg p-1 text-heading transition hover:bg-primary-muted"
           >
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <div>
-            <p className="text-sm text-gray-500">{merchant.shopName}</p>
-            <p className="font-semibold">{service.name}</p>
+            <p className="text-sm text-muted">{merchant.shopName}</p>
+            <p className="font-semibold text-heading">{service.name}</p>
           </div>
         </div>
       </header>
@@ -140,13 +140,13 @@ export function BookingForm({
             {(["date", "time", "info"] as const).map((s, i) => (
               <motion.div
                 key={s}
-                className="h-1 flex-1 rounded-full bg-gray-200"
+                className="h-1 flex-1 rounded-full bg-primary-muted"
                 animate={{
                   backgroundColor:
                     (s === "date" && (step === "date" || step === "time" || step === "info")) ||
                     (s === "time" && (step === "time" || step === "info")) ||
                     (s === "info" && step === "info")
-                      ? "#4f46e5"
+                      ? "#4b5563"
                       : "#e5e7eb",
                   scaleY:
                     (s === "date" && step === "date") ||
@@ -170,8 +170,8 @@ export function BookingForm({
               exit={reduced ? undefined : slideStep.exit}
               transition={spring}
             >
-            <h2 className="mb-4 flex items-center gap-2 font-semibold">
-              <Calendar className="h-5 w-5 text-indigo-600" />
+            <h2 className="mb-4 flex items-center gap-2 font-semibold text-heading">
+              <Calendar className="h-5 w-5 text-heading" strokeWidth={1.5} />
               เลือกวัน
             </h2>
             <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
@@ -186,8 +186,8 @@ export function BookingForm({
                   className={cn(
                     "rounded-xl border p-3 text-center text-sm transition",
                     d.open
-                      ? "border-gray-200 bg-white hover:border-indigo-300 active:scale-95"
-                      : "border-gray-100 bg-gray-50 text-gray-300 cursor-not-allowed"
+                      ? "border-border bg-surface text-heading hover:border-heading/30 hover:bg-pastel-cream/40 active:scale-95"
+                      : "cursor-not-allowed border-border/60 bg-primary-muted text-muted"
                   )}
                 >
                   {d.label}
@@ -207,15 +207,15 @@ export function BookingForm({
             >
             <button
               onClick={() => setStep("date")}
-              className="mb-4 text-sm text-indigo-600"
+              className="mb-4 text-sm font-medium text-heading hover:underline"
             >
               ← เปลี่ยนวัน ({selectedDate})
             </button>
-            <h2 className="mb-4 font-semibold">เลือกเวลา</h2>
+            <h2 className="mb-4 font-semibold text-heading">เลือกเวลา</h2>
             {loadingSlots ? (
-              <p className="py-8 text-center text-gray-500">กำลังโหลด...</p>
+              <p className="py-8 text-center text-muted">กำลังโหลด...</p>
             ) : slots.length === 0 ? (
-              <p className="py-8 text-center text-gray-500">
+              <p className="py-8 text-center text-muted">
                 ไม่มีช่วงเวลาว่างในวันนี้
               </p>
             ) : (
@@ -227,7 +227,7 @@ export function BookingForm({
                       setSelectedSlot(slot);
                       setStep("info");
                     }}
-                    className="rounded-xl border border-gray-200 bg-white py-3 text-sm font-medium transition hover:border-indigo-300 active:scale-95"
+                    className="rounded-xl border border-border bg-surface py-3 text-sm font-medium text-heading transition hover:border-heading/30 hover:bg-pastel-mint/40 active:scale-95"
                   >
                     {slot.label}
                   </button>
@@ -245,14 +245,18 @@ export function BookingForm({
               exit={reduced ? undefined : slideStep.exit}
               transition={spring}
             >
-          <Card>
+          <Card className="overflow-hidden p-0">
+            <div className="border-b border-border bg-pastel-pink px-5 py-3">
+              <p className="text-sm font-medium text-heading">ข้อมูลการจอง</p>
+            </div>
+            <div className="p-5">
             <button
               onClick={() => setStep("time")}
-              className="mb-4 text-sm text-indigo-600"
+              className="mb-4 text-sm font-medium text-heading hover:underline"
             >
               ← เปลี่ยนเวลา ({selectedSlot.label})
             </button>
-            <p className="mb-4 text-sm text-gray-500">
+            <p className="mb-4 text-sm text-muted">
               {service.name} · {formatPriceTHB(service.price)} ·{" "}
               {service.durationMinutes} นาที
             </p>
@@ -308,6 +312,7 @@ export function BookingForm({
                 ยืนยันการจอง
               </Button>
             </form>
+            </div>
           </Card>
             </motion.div>
           )}

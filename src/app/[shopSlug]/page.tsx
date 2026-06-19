@@ -24,6 +24,7 @@ export default async function ShopPage({ params }: Props) {
       shopName={merchant.shopName}
       phone={merchant.phone}
       logoUrl={merchant.logoUrl}
+      workingHours={merchant.workingHours}
       services={merchant.services}
     />
   );

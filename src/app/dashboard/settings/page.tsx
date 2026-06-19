@@ -57,16 +57,18 @@ export default function SettingsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">ตั้งค่าร้าน</h1>
+      <h1 className="text-2xl font-semibold text-heading">ตั้งค่าร้าน</h1>
 
       {session?.user?.slug && (
-        <Card className="bg-indigo-50 border-indigo-100">
-          <h2 className="font-semibold text-indigo-900">ลิงก์จองสำหรับ TikTok Bio</h2>
-          <p className="mt-1 text-sm text-indigo-700">
-            คัดลอกลิงก์นี้ไปวางใน Bio หรือ Social Media
-          </p>
-          <div className="mt-3 flex items-center gap-2">
-            <code className="flex-1 rounded-lg bg-white px-3 py-2 text-sm">
+        <Card className="overflow-hidden p-0">
+          <div className="border-b border-border bg-pastel-blue px-5 py-4">
+            <h2 className="font-medium text-heading">ลิงก์จองสำหรับลูกค้า</h2>
+            <p className="mt-1 text-sm text-muted">
+              คัดลอกลิงก์นี้แชร์ให้ลูกค้าจองคิว
+            </p>
+          </div>
+          <div className="flex items-center gap-2 p-5">
+            <code className="flex-1 rounded-lg bg-primary-muted px-3 py-2 text-sm">
               /{session.user.slug}
             </code>
             <Button variant="secondary" size="sm" onClick={copyLink}>
@@ -80,8 +82,11 @@ export default function SettingsPage() {
         </Card>
       )}
 
-      <Card>
-        <form onSubmit={handleSave} className="space-y-4">
+      <Card className="overflow-hidden p-0">
+        <div className="border-b border-border bg-pastel-cream px-5 py-4">
+          <h2 className="font-medium text-heading">ข้อมูลร้าน</h2>
+        </div>
+        <form onSubmit={handleSave} className="space-y-4 p-5">
           <Input
             id="shopName"
             label="ชื่อร้าน"

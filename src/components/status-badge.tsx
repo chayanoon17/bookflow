@@ -7,7 +7,7 @@ export function StatusBadge({ status }: { status: AppointmentStatus | string }) 
     <span
       className={cn(
         "inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium",
-        STATUS_COLORS[key] ?? "bg-gray-100 text-gray-600"
+        STATUS_COLORS[key] ?? "bg-primary-muted text-muted"
       )}
     >
       {STATUS_LABELS[key] ?? status}

@@ -53,7 +53,7 @@ export default function AppointmentsPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-bold">ตารางคิว</h1>
+        <h1 className="text-2xl font-semibold text-heading">ตารางคิว</h1>
         <div className="flex gap-2">
           <Button
             variant={view === "list" ? "primary" : "outline"}
@@ -76,34 +76,40 @@ export default function AppointmentsPage() {
               const v = e.target.value;
               setDate(view === "list" ? v : `${v}-01`);
             }}
-            className="rounded-xl border border-gray-300 px-3 py-2 text-sm"
+            className="rounded-xl border border-border bg-surface px-3 py-2 text-sm text-heading outline-none focus:border-heading focus:ring-2 focus:ring-heading/10"
           />
         </div>
       </div>
 
-      <Card>
+      <Card className="overflow-hidden p-0">
+        <div className="border-b border-border bg-pastel-blue px-5 py-4">
+          <h2 className="font-medium text-heading">
+            {view === "list" ? "คิวรายวัน" : "คิวรายเดือน"}
+          </h2>
+        </div>
+        <div className="p-5">
         {loading ? (
-          <p className="py-8 text-center text-gray-500">กำลังโหลด...</p>
+          <p className="py-8 text-center text-muted">กำลังโหลด...</p>
         ) : appointments.length === 0 ? (
-          <p className="py-8 text-center text-gray-500">ไม่มีคิวในช่วงเวลานี้</p>
+          <p className="py-8 text-center text-muted">ไม่มีคิวในช่วงเวลานี้</p>
         ) : (
           <div className="space-y-4">
             {appointments.map((apt) => (
               <div
                 key={apt.id}
-                className="rounded-xl border border-gray-100 p-4"
+                className="rounded-xl border border-border bg-surface p-4"
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <div className="flex items-center gap-2">
-                      <p className="font-semibold">{apt.customerName}</p>
+                      <p className="font-semibold text-heading">{apt.customerName}</p>
                       <StatusBadge status={apt.status as AppointmentStatus} />
                     </div>
-                    <p className="mt-1 text-sm text-gray-500">
+                    <p className="mt-1 text-sm text-muted">
                       {formatPhone(apt.customerPhone)} · {apt.service.name} ·{" "}
                       {formatPriceTHB(apt.service.price)}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-muted">
                       {format(new Date(apt.startTime), "d MMM yyyy")}{" "}
                       {formatTimeTH(new Date(apt.startTime))} · {apt.referenceCode}
                     </p>
@@ -116,8 +122,8 @@ export default function AppointmentsPage() {
                         className={cn(
                           "rounded-lg px-2 py-1 text-xs transition",
                           apt.status === s
-                            ? "bg-indigo-100 text-indigo-800 font-medium"
-                            : "bg-gray-50 text-gray-500 hover:bg-gray-100"
+                            ? "bg-pastel-mint font-medium text-heading"
+                            : "bg-primary-muted text-muted hover:bg-pastel-cream/60 hover:text-heading"
                         )}
                       >
                         {STATUS_LABELS[s]}
@@ -129,6 +135,7 @@ export default function AppointmentsPage() {
             ))}
           </div>
         )}
+        </div>
       </Card>
     </div>
   );
